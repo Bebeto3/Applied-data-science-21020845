@@ -1,0 +1,171 @@
+df0 = df[df['Months'] == 'Meteorological year'] # new data frame includes only yearly values
+df1 = df0[df0['Country Name'] == 'World'] # from new data frame filtering World's data
+df2 = df0[df0['Country Name'] == 'Annex I countries'] # from new data frame filtering'Annex I countries' data
+df3 = df0[df0['Country Name'] == 'Non-Annex I countries'] # from new data frame filtering  'Non-Annex I countries' data
+
+# Create traces
+fig = go.Figure()
+#create each categories 
+fig.add_trace(go.Scatter(x = df1.year, y=df1.tem_change,
+                    mode='markers',
+                    name='World'))
+fig.add_trace(go.Scatter(x = df2.year , y=df2.tem_change,
+                    mode='lines',
+                    name='Annex I countries'))
+fig.add_annotation(x='55',y=2.098,
+                   xref="x", yref="y",
+            text="The hottest record",
+        showarrow=True,
+        font=dict(
+            family="Courier New, monospace",
+            size=16,
+            color="#ffffff"
+            ),
+        align="center",
+        arrowhead=2,
+        arrowsize=1,
+        arrowwidth=2,
+        arrowcolor="#636363",
+        ax=20,
+        ay=-30,
+        bordercolor="#c7c7c7",
+        borderwidth=2,
+        borderpad=4,
+        bgcolor="#ff7f0e",
+        opacity=0.8
+        )
+fig.add_trace(go.Scatter(x = df3.year , y=df3.tem_change,
+                    mode='lines', name='Non-Annex I countries'))
+
+# adjusting size of graph, legend place, and background colour
+fig.update_layout(
+    autosize=False,
+    width=1000,
+    height=600,
+    margin=dict(
+        l=50,
+        r=50,
+        b=100,
+        t=100,
+        pad=4
+    ),
+    
+    template='seaborn',
+    paper_bgcolor="rgb(234, 234, 242)",
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+))
+
+fig.update_xaxes(type='category',title='Years')
+fig.update_yaxes(title='Temperature Change')
+
+fig.show()
+#reference: https://plotly.com/python/line-and-scatter/
+df0 = df[df['Country Name'] == 'World']
+df1 = df0[df0['Months'] == 'Winter']
+df2 = df0[df0['Months'] == 'Spring']
+df3 = df0[df0['Months'] == 'Summer']
+df4 = df0[df0['Months'] == 'Fall']
+import plotly.graph_objects as go
+
+# Create traces
+fig = go.Figure()
+fig.add_trace(go.Scatter(x = df1['year'], y=df1.tem_change,
+                    mode='lines',
+                    name='Winter'))
+fig.add_trace(go.Scatter(x = df2['year'] , y=df2.tem_change,
+                    mode='markers',
+                    name='Spring'))
+fig.add_trace(go.Scatter(x = df3['year'] , y=df3.tem_change,
+                    mode='lines', name='Summer'))
+fig.add_trace(go.Scatter(x = df4['year'] , y=df4.tem_change,
+                    mode='markers', name='Fall'))
+fig.add_annotation(x='55',y=2.165,
+                   xref="x", yref="y",
+            text="The hottest winter",
+        showarrow=True,
+        font=dict(
+            family="Courier New, monospace",
+            size=16,
+            color="#ffffff"
+            ),
+        align="center",
+        arrowhead=2,
+        arrowsize=1,
+        arrowwidth=2,
+        arrowcolor="#636363",
+        ax=20,
+        ay=-30,
+        bordercolor="#c7c7c7",
+        borderwidth=2,
+        borderpad=4,
+        bgcolor="#ff7f0e",
+        opacity=0.8
+        )
+# adjusting size of graph, legend place, and background colour
+fig.update_layout(
+    autosize=False,
+    width=1000,
+    height=600,
+    margin=dict(
+        l=50,
+        r=50,
+        b=100,
+        t=100,
+        pad=4
+    ),
+    template='seaborn',
+    paper_bgcolor="rgb(234, 234, 242)",
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+))
+fig.update_xaxes(type='category',title='Years')
+fig.update_yaxes(title='Temperature Change')
+
+fig.show()
+#reference: https://plotly.com/python/line-and-scatter/
+df0 = df[df['Country Name'] == 'World']
+df0.set_index("Months", inplace=True)
+df0 = df0.loc[['January', 'February', 'March', 'April', 'May', 'June', 'July','August', 'September', 'October', 'November', 'December' ]]
+df0.reset_index(inplace = True)
+
+
+fig = px.line_polar(df0, r=df0.tem_change, theta=df0.Months,animation_frame='year', line_close=True)
+
+fig.update_layout(
+  polar=dict(
+    radialaxis=dict(
+      visible=True,
+      range=[-0.5, 3]
+    )),
+    autosize=False,
+    width=1000,
+    height=600,
+    margin=dict(
+        l=50,
+        r=50,
+        b=100,
+        t=100,
+        pad=4
+    ),
+    template='seaborn',
+    paper_bgcolor="rgb(234, 234, 242)",
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+))
+
+
+fig.show()
+
