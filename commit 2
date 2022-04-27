@@ -1,0 +1,120 @@
+#1. Renaming
+df.rename(columns = {'Area':'Country Name'},inplace = True)
+df.set_index('Months', inplace=True)
+df.rename({'Dec\x96Jan\x96Feb': 'Winter', 'Mar\x96Apr\x96May': 'Spring', 'Jun\x96Jul\x96Aug':'Summer','Sep\x96Oct\x96Nov':'Fall'}, axis='index',inplace = True)
+df.reset_index(inplace = True)
+
+#2. Filtering 
+df = df[df['Element'] == 'Temperature change']
+
+#2. Drop unwanted columns from df_countrycode
+df_countrycode.drop(['Country Code','M49 Code','ISO2 Code','Start Year','End Year'],axis=1,inplace=True)
+df_countrycode.rename(columns = {'Country':'Country Name','ISO3 Code':'Country Code'},inplace=True)
+
+#3. Merging with df to df_country
+df = pd.merge(df, df_countrycode, how='outer', on='Country Name')
+
+
+#2. Drop unwanted columns
+df.drop(['Area Code','Months Code','Element Code','Element','Unit'],axis=1,inplace=True)
+
+#3.Channing dataframe organization
+df = df.melt(id_vars=["Country Code", "Country Name","Months",], var_name="year", value_name="tem_change")
+df["year"] = [i.split("Y")[-1] for i in df.year]
+
+display(df.sample(5))
+df_c =df.copy()
+df_c.set_index("year", inplace=True)
+df_c = df_c.loc[['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019']]
+df_c.reset_index(inplace = True)
+
+
+df_c = df_c.groupby(
+   ['Country Name',]
+).agg(
+    {
+        'tem_change':'mean', 
+        
+    }
+)
+df_c.reset_index(inplace = True)
+df_c = df_c.sort_values(by=['tem_change'],ascending=False).head(10)
+
+fig = px.bar(df_c, x="Country Name", y='tem_change' ,text='tem_change', title="Top ten countries that have highest temperature change in the last decades")
+fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
+
+# adjusting size of graph, legend place, and background colour
+fig.update_layout(
+    autosize=False,
+    width=1000,
+    height=600,
+        t=100,
+        pad=4
+    ),
+  
+    template='seaborn',
+    paper_bgcolor="rgb(234, 234, 242)",
+    legend=dict(
+        orientation="v",
+        yanchor="bottom",
+        y=0.3,
+        xanchor="left",
+        x=1.02
+))
+fig.update_xaxes( tickangle = 10,
+        title_text = "Countries",
+        title_font = {"size": 15},
+        title_standoff = 0)
+fig.update_yaxes(showticklabels=False,tickmode="auto", title='Temperature Change',title_standoff = 0)
+
+fig.show()   margin=dict(
+        l=50,
+        r=50,
+        b=100,
+ df_c =df.copy()
+df_c.set_index("year", inplace=True)
+df_c = df_c.loc[['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019']]
+df_c.reset_index(inplace = True)
+
+
+df_c = df_c.groupby(
+   ['Country Name',]
+).agg(
+    {
+        'tem_change':'mean', 
+        
+    }
+)
+df_c.reset_index(inplace = True)
+df_c = df_c.sort_values(by=['tem_change'],ascending=True).head(10)
+
+fig = px.bar(df_c, x="Country Name", y='tem_change',text='tem_change' , title="Top ten countries that have lowest temperature change in the last decades")
+fig.update_traces(texttemplate='%{text:.2f}', textposition='outside')
+# adjusting size of graph, legend place, and background colour
+fig.update_layout(
+    autosize=False,
+    width=1000,
+    height=600,
+    margin=dict(
+        l=50,
+        r=50,
+        b=100,
+        t=100,
+        pad=4
+    ),
+    template='seaborn',
+    paper_bgcolor="rgb(234, 234, 242)",
+    legend=dict(
+        orientation="v",
+        yanchor="bottom",
+        y=0.3,
+        xanchor="left",
+        x=1.02
+))
+fig.update_xaxes( tickangle = 10,
+        title_text = "Countries",
+        title_font = {"size": 15},
+        title_standoff = 0)
+fig.update_yaxes(showticklabels=False, title='Temperature Change')
+
+fig.show()
